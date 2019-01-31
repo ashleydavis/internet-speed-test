@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Internet Speed Test</title>
+
+	<!-- http://stackoverflow.com/a/37480521/25868 -->
+	<!-- Insert this line above script imports  -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+	<script language="javascript" type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script language="javascript" type="text/javascript" src="bower_components/Flot/jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="bower_components/Flot/jquery.flot.time.js"></script>
+    <script language="javascript" type="text/javascript" src="bower_components/moment/moment.js"></script>
+
+	<!-- Insert this line after script imports -->
+	<script>if (window.module) module = window.module;</script>
+
+	<script type="text/javascript">
+
+	$(function() {
+
+		var options = {
+			lines: {
+				show: true
+			},
+			points: {
+				show: true
+			},
+			xaxis: {
+                mode: "time",
+				timezone: "browser",
+			},
+			grid: {
+				hoverable: true,
+				clickable: true
+			},
+		};
+
+        //$.get("internet-speed?period=hour", function (data) {
+		$.get("internet-speed", function (data) {
+            var series = [];
+			var lowSeries = [];
+			var highSeries = [];
+            var limit = 2;
+
+            for (var i = 0; i < data.length; ++i) {
+                var row = data[i];
+                var mbps = row.SpeedMbps;
+				var t = new Date(row.Date).getTime();
+                series.push([t, mbps]); 
+				lowSeries.push([t, row.Low]); 
+				highSeries.push([t, row.High]); 
+            }
+
+            $.plot("#placeholder", 
+				[
+					{
+						label: "Average Mbps",
+						data: series,
+					},
+				], 
+				options
+			);
+        });
+
+		$("#refreshBtn").click(function () {
+			window.location.reload();
+		});
+	});
+
+	</script>
+</head>
+<body>
+
+    <div id="placeholder" style="width: 100%; height: 500px;"></div>
+
+	<button id="refreshBtn">Refresh</button>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "public",
+  "authors": [
+    "Ashley Davis <ashley@codecapers.com.au>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "Flot": "flot#^0.8.3",
+    "moment": "^2.17.1"
+  }
+}

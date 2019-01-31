@@ -1,0 +1,4 @@
+node_modules/
+public/bower_components/
+*.bak
+internet-speed-test-win32-x64/
