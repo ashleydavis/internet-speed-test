@@ -32,15 +32,9 @@ var testRun = function() {
 
     inProgress = true;
 
-    api((err, result) => {
-        if (err) {
-            console.error(err && err.stack || err);
-            inProgress = false;
-            return;
-        }
+    console.log("Querying Fast.com...");
 
-        console.log(result);
-
+    api().forEach(result => {
         if (result.isDone) {
             inProgress = false;
 
@@ -49,7 +43,7 @@ var testRun = function() {
             var timeFinishedStr = moment(timeFinished).format('HH:mm:ss');
             var testTimeSeconds = moment(timeFinished).diff(cronStart, 'seconds');
 
-            var speed = result.speed;
+            var speed = result.downloadSpeed;
 
             if (result.unit === 'Kbps') {
                 speed = speed / 1000;
@@ -66,11 +60,14 @@ var testRun = function() {
 
             writeOutput(data);
         }
+    })
+    .then(() => {
+        console.log("Done querying Fast.com!");
     });
 };
 
 var CronJob = require('cron').CronJob;
-new CronJob('0 */10 * * * *', testRun, null, true, 'Australia/Brisbane');
+new CronJob('0 */1 * * * *', testRun, null, true, 'Australia/Brisbane');
 
 var express = require('express')
 var app = express()
@@ -168,9 +165,8 @@ app.get('/internet-speed', (req, res) => {
             }).data;
 
             data.forEach(record => {
-                // Merge data time.
+                // Merge date and time.
                 record.Date = moment(record.Date + ' ' + record.Time, 'YYYY-MM-DD HH:mm:ss').toDate(),
-                console.log(record.Date);
                 delete record.Time;
             });
         }

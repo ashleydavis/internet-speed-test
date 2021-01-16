@@ -20,7 +20,7 @@ Then open a command line, change to the repo directory and install dependencies:
 Change to the pubic sub-directory and install bower dependencies:
 
     cd public
-    bower install
+    npx bower install
 
 Change back to repo root directory:
 
